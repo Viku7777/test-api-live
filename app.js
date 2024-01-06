@@ -1,18 +1,28 @@
-const express = require("express");
-const database = require("./database/connect.js");
-const app_routes = require("./routes/product");
-const app = express();
+
+
+
+const mongoose = require("mongoose");
 require("dotenv").config();
+
+const express = require("express");
+const app = express();
+const api_routes = require("./routes/routes.js");
 
 const PORT = process.env.PORT || 4500;
 
-app.use("/", app_routes);
-const start = async () => {
+
+app.use(express.json());
+app.use("/", api_routes);
+
+const startServer = async () => {
     try {
-        await database(process.env.MONGO_KEY + "/product");
-        await app.listen(PORT, () => { console.log("server live Port is " + PORT); })
+
+        await mongoose.connect(process.env.MONGO_KEY + "/dating");
+        await app.listen(PORT, () => { console.log("server is Live and port is ::: " + PORT); })
     } catch (error) {
         console.log(error);
     }
 }
-start();
+
+startServer();
+
